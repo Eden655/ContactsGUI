@@ -85,19 +85,7 @@ public class Screen extends JFrame{
         });
 
 
-        clearButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int personNumber = listPeople.getSelectedIndex();
-                Person p = people.get(personNumber);
-                textName.setText("");
-                textEmail.setText("");
-                textNumber.setText("");
-                textAddress.setText("");
-                textBirth.setText("");
 
-            }
-        });
     }
     public void refreshPeopleList() {
         listPeopleModel.removeAllElements();
