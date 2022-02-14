@@ -1,10 +1,17 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.io.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
+
 
 public class Screen extends JFrame{
     private JPanel TopPanel;
@@ -23,6 +30,7 @@ public class Screen extends JFrame{
     private JLabel Birth;
     private JPanel Maine;
     private JLabel LablAge;
+    private JPanel Picture;
     private JButton clearButton;
     private ArrayList<Person> people;
     private DefaultListModel listPeopleModel;
@@ -100,10 +108,41 @@ public class Screen extends JFrame{
         refreshPeopleList();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         Screen screen = new Screen();
+        screen.setSize(750,500);
         screen.setVisible(true);
 
+        screen.Picture.setLayout(new FlowLayout());
+        BufferedImage myPicture = ImageIO.read(new File("Addressbook.png"));
+        Image dmyPicture = myPicture.getScaledInstance(109, 63, Image.SCALE_SMOOTH);
+        JLabel picLabel = new JLabel(new ImageIcon(dmyPicture));
+        screen.Picture.add(picLabel);
+
+        FileWriter fw = new FileWriter("Contacts.txt", true);
+
+        fw.write("Sheldon Lee Cooper, sheldon@gmail.com, 555 0001, route 66,26/02/1980\n");
+        fw.write("Howard Joel Wolowitz, howard@gmail.com, 555 0002, Trafalgar square,01/03/1981\n");
+        fw.write("Bernadette Rostenkowski-Wolowitz, bernadette@gmail.com, 555 0002, Broadway 55,01/01/1984\n");
+        fw.write("Rajesh Ramayan Koothrappali, raj@gmail.com, 555 0003, Piazza San Carlo 26,06/10/1981\n");
+        fw.write("Penny Hofstadter, penny@gmail.com, 555 0004, Via XX Settembre,02/12/1985\n");
+        fw.write("Leonard Hofstadter, leonard@gmail.com, 555 0004, No address available,17/05/1980\n");
+        fw.write("Amy Farrah Fowler, amy@gmail.com, 555 0005, Spingbars Avenue 34,17/12/1979\n");
+
+
+        fw.close();
+        FileReader fr = new FileReader("Contacts.txt");
+        BufferedReader br = new BufferedReader(fr);
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            String[] arraypeople = line.split(",");
+            Person p = new Person(arraypeople[0], arraypeople[1], arraypeople[2], arraypeople[3], arraypeople[4]);
+            screen.addPerson(p);
+        }
+        br.close();
+        fr.close();
+/*
         Person sheldon = new Person("Sheldon Lee Cooper", "sheldon@gmail.com", "555 0001","route 66", "26/02/1980");
         Person howard = new Person("Howard Joel Wolowitz", "howard@gmail.com", "555 0002", "Trafalgar square", "01/03/1981");
         Person bernadette = new Person("Bernadette Rostenkowski-Wolowitz", "bernadette@gmail.com", "555 0002", "Broadway 55",
@@ -120,5 +159,7 @@ public class Screen extends JFrame{
         screen.addPerson(penny);
         screen.addPerson(leonard);
         screen.addPerson(amy);
+        */
+
     }
 }
